@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 interface AccordionItemProps {
   title: string;
@@ -11,6 +13,19 @@ interface AccordionItemProps {
 }
 
 function AccordionItem({ title, content, isOpen, onToggle }: AccordionItemProps) {
+  // Remove the first H1 line (question title) from content since it's already in the header
+  const processedContent = content
+    .split('\n')
+    .filter((line, index) => {
+      // Skip the first line if it's an H1 (starts with #)
+      if (index === 0 && line.trim().startsWith('# ')) {
+        return false;
+      }
+      return true;
+    })
+    .join('\n')
+    .trim();
+
   return (
     <div className="accordion-item">
       <button
@@ -23,7 +38,32 @@ function AccordionItem({ title, content, isOpen, onToggle }: AccordionItemProps)
       </button>
       {isOpen && (
         <div className="accordion-content">
-          <ReactMarkdown>{content}</ReactMarkdown>
+          <ReactMarkdown
+            components={{
+              code(props: any) {
+                const { children, className, node, ...rest } = props;
+                const match = /language-(\w+)/.exec(className || '');
+                const isInline = !match;
+                
+                return isInline ? (
+                  <code className={className} {...rest}>
+                    {children}
+                  </code>
+                ) : (
+                  <SyntaxHighlighter
+                    style={vscDarkPlus}
+                    language={match[1]}
+                    PreTag="div"
+                    {...rest}
+                  >
+                    {String(children).replace(/\n$/, '')}
+                  </SyntaxHighlighter>
+                );
+              },
+            }}
+          >
+            {processedContent}
+          </ReactMarkdown>
         </div>
       )}
     </div>

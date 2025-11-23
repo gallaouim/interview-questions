@@ -212,18 +212,17 @@ a {
 }
 
 .accordion-content pre {
-  background: #2d2d2d;
-  color: #f8f8f2;
-  padding: 1rem;
-  border-radius: 8px;
-  overflow-x: auto;
   margin: 1rem 0;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .accordion-content pre code {
   background: transparent;
   padding: 0;
   color: inherit;
+  font-size: 0.9rem;
+  line-height: 1.6;
 }
 
 .accordion-content ul,
