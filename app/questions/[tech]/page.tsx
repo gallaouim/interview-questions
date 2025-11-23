@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import ReactMarkdown from 'react-markdown';
+import Accordion from '@/components/Accordion';
 
 const technologies = ['javascript', 'typescript', 'nodejs', 'reactjs'];
 
@@ -63,17 +63,13 @@ export default async function QuestionsPage({
           {techName} Interview Questions
         </h1>
         
-        <ul className="questions-list">
-          {questions.map((question) => (
-            <li key={question.slug}>
-              <Link href={`/questions/${tech}/${question.slug}`}>
-                <div className="question-item">
-                  <h3>{question.title}</h3>
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <Accordion
+          items={questions.map((q) => ({
+            title: q.title,
+            content: q.content,
+            slug: q.slug,
+          }))}
+        />
       </div>
     </div>
   );
