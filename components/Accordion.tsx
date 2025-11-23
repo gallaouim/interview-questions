@@ -53,15 +53,18 @@ function AccordionItem({ title, content, isOpen, onToggle }: AccordionItemProps)
                   );
                 }
                 
-                // Map language aliases
+                // Map language aliases - Prism supports jsx, typescript, javascript
+                const language = match[1].toLowerCase();
                 const languageMap: { [key: string]: string } = {
-                  'jsx': 'javascript',
                   'ts': 'typescript',
-                  'tsx': 'typescript',
+                  'tsx': 'tsx',
+                  'jsx': 'jsx',
+                  'js': 'javascript',
+                  'javascript': 'javascript',
+                  'typescript': 'typescript',
                 };
                 
-                const language = match[1];
-                const mappedLanguage = languageMap[language.toLowerCase()] || language;
+                const mappedLanguage = languageMap[language] || language;
                 
                 return (
                   <SyntaxHighlighter
