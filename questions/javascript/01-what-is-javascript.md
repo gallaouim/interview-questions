@@ -1,6 +1,9 @@
+---
+tag: basic
+---
+
 # What is JavaScript?
 
-JavaScript is a high-level, interpreted programming language that is one of the core technologies of the World Wide Web, alongside HTML and CSS. It enables interactive web pages and is an essential part of web applications.
 
 ## Answer
 

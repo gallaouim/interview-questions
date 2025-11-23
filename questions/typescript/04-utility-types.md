@@ -1,3 +1,7 @@
+---
+tag: advanced
+---
+
 # What are Utility Types in TypeScript?
 
 TypeScript provides several built-in utility types that help transform existing types into new types.

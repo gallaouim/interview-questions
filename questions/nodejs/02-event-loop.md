@@ -1,3 +1,7 @@
+---
+tag: intermediate
+---
+
 # What is the Event Loop in Node.js?
 
 The event loop is a crucial concept for understanding how Node.js handles asynchronous operations.

@@ -88,27 +88,70 @@ function AccordionItem({ title, content, isOpen, onToggle }: AccordionItemProps)
 }
 
 interface AccordionProps {
-  items: Array<{ title: string; content: string; slug: string }>;
+  items: Array<{ title: string; content: string; slug: string; tag: string }>;
 }
 
 export default function Accordion({ items }: AccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   const handleToggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
+  const tags = ['basic', 'intermediate', 'advanced'];
+  const filteredItems = selectedTag
+    ? items.filter((item) => item.tag === selectedTag)
+    : items;
+
+  const handleItemToggle = (slug: string) => {
+    const index = items.findIndex((item) => item.slug === slug);
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   return (
-    <div className="accordion">
-      {items.map((item, index) => (
-        <AccordionItem
-          key={item.slug}
-          title={item.title}
-          content={item.content}
-          isOpen={openIndex === index}
-          onToggle={() => handleToggle(index)}
-        />
-      ))}
+    <div>
+      <div className="filter-buttons">
+        <button
+          className={`filter-btn ${selectedTag === null ? 'active' : ''}`}
+          onClick={() => {
+            setSelectedTag(null);
+            setOpenIndex(null);
+          }}
+        >
+          All
+        </button>
+        {tags.map((tag) => (
+          <button
+            key={tag}
+            className={`filter-btn ${selectedTag === tag ? 'active' : ''}`}
+            onClick={() => {
+              setSelectedTag(tag);
+              setOpenIndex(null);
+            }}
+          >
+            {tag.charAt(0).toUpperCase() + tag.slice(1)}
+          </button>
+        ))}
+      </div>
+      <div className="accordion">
+        {filteredItems.map((item) => {
+          const index = items.findIndex((i) => i.slug === item.slug);
+          return (
+            <div key={item.slug} className="accordion-wrapper">
+              <span className={`question-tag tag-${item.tag}`}>
+                {item.tag}
+              </span>
+              <AccordionItem
+                title={item.title}
+                content={item.content}
+                isOpen={openIndex === index}
+                onToggle={() => handleItemToggle(item.slug)}
+              />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

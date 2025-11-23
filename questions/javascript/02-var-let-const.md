@@ -1,6 +1,8 @@
-# What is the difference between var, let, and const?
+---
+tag: basic
+---
 
-Understanding variable declarations is fundamental to JavaScript programming.
+# What is the difference between var, let, and const?
 
 ## Answer
 

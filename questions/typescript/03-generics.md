@@ -1,3 +1,7 @@
+---
+tag: intermediate
+---
+
 # What are Generics in TypeScript?
 
 Generics provide a way to make components work with any data type and not restrict to one data type.

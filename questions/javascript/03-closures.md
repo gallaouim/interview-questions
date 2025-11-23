@@ -1,6 +1,8 @@
-# What are Closures in JavaScript?
+---
+tag: intermediate
+---
 
-Closures are a fundamental concept in JavaScript that allows functions to access variables from their outer scope even after the outer function has returned.
+# What are Closures in JavaScript?
 
 ## Answer
 

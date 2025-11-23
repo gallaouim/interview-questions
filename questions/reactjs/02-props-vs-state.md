@@ -1,3 +1,7 @@
+---
+tag: basic
+---
+
 # What is the difference between Props and State in React?
 
 Understanding the difference between props and state is fundamental to React development.

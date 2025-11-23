@@ -1,3 +1,7 @@
+---
+tag: intermediate
+---
+
 # What are React Hooks?
 
 Hooks are functions that let you use state and other React features in functional components.

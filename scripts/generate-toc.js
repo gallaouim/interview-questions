@@ -26,13 +26,47 @@ function getQuestions(techId) {
       const fileContents = fs.readFileSync(filePath, 'utf8');
       const slug = file.replace('.md', '');
       
-      // Extract title from first line (should be # Title)
-      const lines = fileContents.split('\n');
+      // Parse frontmatter if present
       let title = '';
-      for (const line of lines) {
-        if (line.trim().startsWith('#')) {
-          title = line.replace(/^#+\s*/, '').trim();
-          break;
+      let tag = 'basic';
+      
+      const lines = fileContents.split('\n');
+      
+      if (fileContents.startsWith('---')) {
+        // Parse frontmatter manually
+        let inFrontmatter = false;
+        let frontmatterEnd = 0;
+        
+        for (let i = 0; i < lines.length; i++) {
+          if (lines[i].trim() === '---') {
+            if (!inFrontmatter) {
+              inFrontmatter = true;
+            } else {
+              frontmatterEnd = i;
+              break;
+            }
+          } else if (inFrontmatter) {
+            const match = lines[i].match(/^tag:\s*(.+)$/);
+            if (match) {
+              tag = match[1].trim().replace(/['"]/g, '');
+            }
+          }
+        }
+        
+        // Extract title after frontmatter
+        for (let i = frontmatterEnd + 1; i < lines.length; i++) {
+          if (lines[i].trim().startsWith('# ')) {
+            title = lines[i].replace(/^#+\s*/, '').trim();
+            break;
+          }
+        }
+      } else {
+        // Extract title from first line
+        for (const line of lines) {
+          if (line.trim().startsWith('# ')) {
+            title = line.replace(/^#+\s*/, '').trim();
+            break;
+          }
         }
       }
       
@@ -46,9 +80,15 @@ function getQuestions(techId) {
       return {
         slug,
         title,
+        tag,
       };
     })
-    .sort((a, b) => a.slug.localeCompare(b.slug));
+    .sort((a, b) => {
+      // Sort by tag first (basic, intermediate, advanced), then by slug
+      const tagOrder = { basic: 0, intermediate: 1, advanced: 2 };
+      const tagDiff = (tagOrder[a.tag] || 0) - (tagOrder[b.tag] || 0);
+      return tagDiff !== 0 ? tagDiff : a.slug.localeCompare(b.slug);
+    });
 
   return questions;
 }
@@ -62,12 +102,23 @@ function generateTOC() {
     if (questions.length > 0) {
       toc += `### ${tech.name}\n\n`;
       
-      questions.forEach((question) => {
-        const link = `questions/${tech.id}/${question.slug}.md`;
-        toc += `- [${question.title}](./${link})\n`;
-      });
+      // Group by tag
+      const byTag = {
+        basic: questions.filter(q => q.tag === 'basic'),
+        intermediate: questions.filter(q => q.tag === 'intermediate'),
+        advanced: questions.filter(q => q.tag === 'advanced'),
+      };
       
-      toc += '\n';
+      ['basic', 'intermediate', 'advanced'].forEach((tag) => {
+        if (byTag[tag].length > 0) {
+          toc += `#### ${tag.charAt(0).toUpperCase() + tag.slice(1)}\n\n`;
+          byTag[tag].forEach((question) => {
+            const link = `questions/${tech.id}/${question.slug}.md`;
+            toc += `- [${question.title}](./${link}) \`[${tag}]\`\n`;
+          });
+          toc += '\n';
+        }
+      });
     }
   });
 

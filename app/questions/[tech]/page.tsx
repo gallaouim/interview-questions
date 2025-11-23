@@ -11,6 +11,7 @@ interface Question {
   slug: string;
   title: string;
   content: string;
+  tag: string;
 }
 
 async function getQuestions(tech: string): Promise<Question[]> {
@@ -31,6 +32,7 @@ async function getQuestions(tech: string): Promise<Question[]> {
         slug: file.replace('.md', ''),
         title: data.title || content.split('\n')[0].replace('#', '').trim(),
         content,
+        tag: data.tag || 'basic',
       };
     })
     .sort((a, b) => a.slug.localeCompare(b.slug));
@@ -68,6 +70,7 @@ export default async function QuestionsPage({
             title: q.title,
             content: q.content,
             slug: q.slug,
+            tag: q.tag,
           }))}
         />
       </div>

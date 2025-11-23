@@ -1,3 +1,7 @@
+---
+tag: basic
+---
+
 # What is TypeScript?
 
 TypeScript is a programming language that extends JavaScript with additional features.

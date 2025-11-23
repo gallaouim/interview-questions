@@ -1,3 +1,7 @@
+---
+tag: basic
+---
+
 # What is Node.js?
 
 Node.js is a runtime environment for executing JavaScript outside the browser.

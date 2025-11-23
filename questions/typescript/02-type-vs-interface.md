@@ -1,3 +1,7 @@
+---
+tag: intermediate
+---
+
 # What is the difference between type and interface in TypeScript?
 
 Both `type` and `interface` are used to define object shapes in TypeScript, but they have some differences.
