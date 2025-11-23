@@ -28,9 +28,30 @@ async function getQuestions(tech: string): Promise<Question[]> {
       const filePath = path.join(questionsDir, file);
       const fileContents = fs.readFileSync(filePath, 'utf8');
       const { data, content } = matter(fileContents);
+      
+      // Extract title from content if not in frontmatter
+      let title = data.title;
+      if (!title) {
+        const lines = content.split('\n');
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (trimmed.startsWith('# ')) {
+            title = trimmed.replace(/^#+\s*/, '').trim();
+            break;
+          }
+        }
+      }
+      
+      // Fallback to slug if no title found
+      if (!title) {
+        title = file.replace('.md', '').split('-').map(word => 
+          word.charAt(0).toUpperCase() + word.slice(1)
+        ).join(' ');
+      }
+      
       return {
         slug: file.replace('.md', ''),
-        title: data.title || content.split('\n')[0].replace('#', '').trim(),
+        title,
         content,
         tag: data.tag || 'basic',
       };
