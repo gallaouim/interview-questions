@@ -21,6 +21,7 @@ An open source platform for interview questions and answers covering JavaScript,
 
 - [What is TypeScript?](./questions/typescript/01-what-is-typescript.md)
 - [What is the difference between type and interface in TypeScript?](./questions/typescript/02-type-vs-interface.md)
+- [What are Generics in TypeScript?](./questions/typescript/03-generics.md)
 
 ### Node.js
 
