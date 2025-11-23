@@ -17,18 +17,40 @@ interface AccordionItemWithTagProps extends AccordionItemProps {
 }
 
 function AccordionItem({ title, content, isOpen, onToggle, tag }: AccordionItemWithTagProps) {
-  // Remove the first H1 line (question title) from content since it's already in the header
-  const processedContent = content
-    .split('\n')
-    .filter((line, index) => {
-      // Skip the first line if it's an H1 (starts with #)
-      if (index === 0 && line.trim().startsWith('# ')) {
-        return false;
-      }
-      return true;
-    })
-    .join('\n')
-    .trim();
+  // Extract only the Answer section from content (skip the "## Answer" heading)
+  const lines = content.split('\n');
+  let answerStartIndex = -1;
+  
+  // Find the "## Answer" section
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    // Look for "## Answer" or "##Answer" (with or without space)
+    if (line.match(/^##\s*Answer/i)) {
+      answerStartIndex = i + 1; // Start after the Answer heading
+      break;
+    }
+  }
+  
+  // If Answer section found, extract everything after it (excluding the "## Answer" heading)
+  // Otherwise, remove the first H1 (question title) and show the rest
+  const processedContent = answerStartIndex >= 0
+    ? lines.slice(answerStartIndex).join('\n').trim()
+    : content
+        .split('\n')
+        .filter((line, index) => {
+          // Skip the first line if it's an H1 (starts with #)
+          const trimmed = line.trim();
+          if (index === 0 && trimmed.startsWith('# ')) {
+            return false;
+          }
+          // Skip "## Answer" heading if present
+          if (trimmed.match(/^##\s*Answer/i)) {
+            return false;
+          }
+          return true;
+        })
+        .join('\n')
+        .trim();
 
   return (
     <div className="accordion-item">
