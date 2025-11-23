@@ -13,7 +13,7 @@ Streams are objects that let you read data from a source or write data to a dest
 - **Transform**: Duplex stream that can modify data (e.g., `zlib.createGzip()`)
 
 **Example - Reading a file:**
-```javascript
+```js
 const fs = require('fs');
 
 // Without streams (loads entire file into memory)
@@ -39,7 +39,7 @@ readStream.on('error', (err) => {
 ```
 
 **Example - Piping streams:**
-```javascript
+```js
 const fs = require('fs');
 const zlib = require('zlib');
 
@@ -53,7 +53,7 @@ fs.createReadStream('input.txt')
 ```
 
 **Example - Custom Transform stream:**
-```javascript
+```js
 const { Transform } = require('stream');
 
 class UpperCaseTransform extends Transform {

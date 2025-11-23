@@ -45,14 +45,28 @@ function AccordionItem({ title, content, isOpen, onToggle }: AccordionItemProps)
                 const match = /language-(\w+)/.exec(className || '');
                 const isInline = !match;
                 
-                return isInline ? (
-                  <code className={className} {...rest}>
-                    {children}
-                  </code>
-                ) : (
+                if (isInline) {
+                  return (
+                    <code className={className} {...rest}>
+                      {children}
+                    </code>
+                  );
+                }
+                
+                // Map language aliases
+                const languageMap: { [key: string]: string } = {
+                  'jsx': 'javascript',
+                  'ts': 'typescript',
+                  'tsx': 'typescript',
+                };
+                
+                const language = match[1];
+                const mappedLanguage = languageMap[language.toLowerCase()] || language;
+                
+                return (
                   <SyntaxHighlighter
                     style={vscDarkPlus}
-                    language={match[1]}
+                    language={mappedLanguage}
                     PreTag="div"
                     {...rest}
                   >
