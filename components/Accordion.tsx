@@ -12,7 +12,11 @@ interface AccordionItemProps {
   onToggle: () => void;
 }
 
-function AccordionItem({ title, content, isOpen, onToggle }: AccordionItemProps) {
+interface AccordionItemWithTagProps extends AccordionItemProps {
+  tag?: string;
+}
+
+function AccordionItem({ title, content, isOpen, onToggle, tag }: AccordionItemWithTagProps) {
   // Remove the first H1 line (question title) from content since it's already in the header
   const processedContent = content
     .split('\n')
@@ -34,7 +38,14 @@ function AccordionItem({ title, content, isOpen, onToggle }: AccordionItemProps)
         aria-expanded={isOpen}
       >
         <span className="accordion-title">{title}</span>
-        <span className="accordion-icon">{isOpen ? '−' : '+'}</span>
+        <div className="accordion-header-right">
+          {tag && (
+            <span className={`question-tag tag-${tag}`}>
+              {tag}
+            </span>
+          )}
+          <span className="accordion-icon">{isOpen ? '−' : '+'}</span>
+        </div>
       </button>
       {isOpen && (
         <div className="accordion-content">
@@ -138,17 +149,14 @@ export default function Accordion({ items }: AccordionProps) {
         {filteredItems.map((item) => {
           const index = items.findIndex((i) => i.slug === item.slug);
           return (
-            <div key={item.slug} className="accordion-wrapper">
-              <span className={`question-tag tag-${item.tag}`}>
-                {item.tag}
-              </span>
-              <AccordionItem
-                title={item.title}
-                content={item.content}
-                isOpen={openIndex === index}
-                onToggle={() => handleItemToggle(item.slug)}
-              />
-            </div>
+            <AccordionItem
+              key={item.slug}
+              title={item.title}
+              content={item.content}
+              isOpen={openIndex === index}
+              onToggle={() => handleItemToggle(item.slug)}
+              tag={item.tag}
+            />
           );
         })}
       </div>

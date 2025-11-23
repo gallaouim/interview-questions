@@ -126,21 +126,19 @@ a {
   gap: 1rem;
 }
 
-.accordion-wrapper {
-  position: relative;
+.accordion-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .question-tag {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  z-index: 10;
-  pointer-events: none;
+  white-space: nowrap;
 }
 
 .tag-basic {
@@ -184,6 +182,7 @@ a {
   text-align: left;
   transition: all 0.3s ease;
   border-left: 4px solid #667eea;
+  gap: 1rem;
 }
 
 .accordion-header:hover {
